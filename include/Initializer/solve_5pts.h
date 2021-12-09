@@ -1,7 +1,8 @@
 //
 // Added by xiaochen at 19-8-16.
 // Solving relative motion.
-// The original file belong to VINS-MONO (https://github.com/HKUST-Aerial-Robotics/VINS-Mono).
+// The original file belong to VINS-MONO
+// (https://github.com/HKUST-Aerial-Robotics/VINS-Mono).
 //
 
 #ifndef SOLVE_5PTS_H
@@ -13,23 +14,21 @@
 
 using namespace std;
 
-#include <opencv2/opencv.hpp>
 #include <Eigen/Dense>
+#include <opencv2/opencv.hpp>
 
 using namespace Eigen;
 
-
 namespace larvio {
 
-class MotionEstimator
-{
-  public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+class MotionEstimator {
+ public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    bool solveRelativeRT(const vector<pair<Vector3d, Vector3d>> &corres, Matrix3d &R, Vector3d &T);
+  bool solveRelativeRT(const vector<pair<Vector3d, Vector3d>> &corres,
+                       Matrix3d &R, Vector3d &T);
 };
 
-}
+}  // namespace larvio
 
-
-#endif //SOLVE_5PTS_H
+#endif  // SOLVE_5PTS_H

@@ -5,17 +5,17 @@
  * All rights reserved.
  */
 
-// The original file belongs to MSCKF_VIO (https://github.com/KumarRobotics/msckf_vio/)
-// Some changes have been made to use it in LARVIO
-
+// The original file belongs to MSCKF_VIO
+// (https://github.com/KumarRobotics/msckf_vio/) Some changes have been made to
+// use it in LARVIO
 
 #ifndef IMU_STATE_H
 #define IMU_STATE_H
 
-#include <map>
-#include <vector>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include <map>
+#include <vector>
 
 #define GRAVITY_ACCELERATION 9.81
 
@@ -75,26 +75,30 @@ struct IMUState {
   // Normally, this transform should be identity.
   static Eigen::Isometry3d T_imu_body;
 
-  IMUState(): id(0), time(0),
-    orientation(Eigen::Vector4d(0, 0, 0, 1)),
-    position(Eigen::Vector3d::Zero()),
-    velocity(Eigen::Vector3d::Zero()),
-    gyro_bias(Eigen::Vector3d::Zero()),
-    acc_bias(Eigen::Vector3d::Zero()) {}
+  IMUState()
+      : id(0),
+        time(0),
+        orientation(Eigen::Vector4d(0, 0, 0, 1)),
+        position(Eigen::Vector3d::Zero()),
+        velocity(Eigen::Vector3d::Zero()),
+        gyro_bias(Eigen::Vector3d::Zero()),
+        acc_bias(Eigen::Vector3d::Zero()) {}
 
-  IMUState(const StateIDType& new_id): id(new_id), time(0),
-    orientation(Eigen::Vector4d(0, 0, 0, 1)),
-    position(Eigen::Vector3d::Zero()),
-    velocity(Eigen::Vector3d::Zero()),
-    gyro_bias(Eigen::Vector3d::Zero()),
-    acc_bias(Eigen::Vector3d::Zero()) {}
-
+  IMUState(const StateIDType& new_id)
+      : id(new_id),
+        time(0),
+        orientation(Eigen::Vector4d(0, 0, 0, 1)),
+        position(Eigen::Vector3d::Zero()),
+        velocity(Eigen::Vector3d::Zero()),
+        gyro_bias(Eigen::Vector3d::Zero()),
+        acc_bias(Eigen::Vector3d::Zero()) {}
 };
 
 typedef IMUState::StateIDType StateIDType;
 
 /*
- * @brief IMUState_aug Augmented state for IMU, including only orientation and position
+ * @brief IMUState_aug Augmented state for IMU, including only orientation and
+ * position
  */
 struct IMUState_Aug {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -129,24 +133,29 @@ struct IMUState_Aug {
   Eigen::Vector4d orientation_cam;
   Eigen::Vector3d position_cam;
 
-  // Store the feature id whose anchor frame is 
+  // Store the feature id whose anchor frame is
   // corresponding to this imu state.
   std::vector<FeatureIDType> FeatureIDs;
 
-  IMUState_Aug(): id(0), time(0),
-    orientation(Eigen::Vector4d(0, 0, 0, 1)),
-    position(Eigen::Vector3d::Zero()) {}
+  IMUState_Aug()
+      : id(0),
+        time(0),
+        orientation(Eigen::Vector4d(0, 0, 0, 1)),
+        position(Eigen::Vector3d::Zero()) {}
 
-  IMUState_Aug(const StateIDType& new_id): id(new_id), time(0),
-    orientation(Eigen::Vector4d(0, 0, 0, 1)),
-    position(Eigen::Vector3d::Zero()) {}
+  IMUState_Aug(const StateIDType& new_id)
+      : id(new_id),
+        time(0),
+        orientation(Eigen::Vector4d(0, 0, 0, 1)),
+        position(Eigen::Vector3d::Zero()) {}
 };
 
 // for augmented imu states, added by QXC
-typedef std::map<StateIDType, IMUState_Aug, std::less<int>,
-        Eigen::aligned_allocator<
-        std::pair<const StateIDType, IMUState_Aug> > > IMUStateServer;
+typedef std::map<
+    StateIDType, IMUState_Aug, std::less<int>,
+    Eigen::aligned_allocator<std::pair<const StateIDType, IMUState_Aug> > >
+    IMUStateServer;
 
-} // namespace larvio
+}  // namespace larvio
 
-#endif // IMU_STATE_H
+#endif  // IMU_STATE_H

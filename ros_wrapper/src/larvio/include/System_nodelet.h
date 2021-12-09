@@ -6,23 +6,24 @@
 #ifndef SYSTEM_NODELET_H
 #define SYSTEM_NODELET_H
 
+#include <System.h>
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
-#include <System.h>
 
 namespace larvio {
-    class SystemNodelet : public nodelet::Nodelet {
-    public:
-        SystemNodelet() { return; }
-        ~SystemNodelet() {
-            // debug log
-            std::cout << "in ~SystemNodelet()" << std::endl;
-            return; }
+class SystemNodelet : public nodelet::Nodelet {
+ public:
+  SystemNodelet() { return; }
+  ~SystemNodelet() {
+    // debug log
+    std::cout << "in ~SystemNodelet()" << std::endl;
+    return;
+  }
 
-    private:
-        virtual void onInit();
-        SystemPtr system_ptr;
-    };
-} // end namespace larvio
+ private:
+  virtual void onInit();
+  SystemPtr system_ptr;
+};
+}  // end namespace larvio
 
-#endif  //SYSTEM_NODELET_H
+#endif  // SYSTEM_NODELET_H

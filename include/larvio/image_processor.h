@@ -5,27 +5,25 @@
  * All rights reserved.
  */
 
-// The original file belongs to MSCKF_VIO (https://github.com/KumarRobotics/msckf_vio/)
-// Tremendous changes have been made to use it in LARVIO
-
+// The original file belongs to MSCKF_VIO
+// (https://github.com/KumarRobotics/msckf_vio/) Tremendous changes have been
+// made to use it in LARVIO
 
 #ifndef IMAGE_PROCESSOR_H
 #define IMAGE_PROCESSOR_H
 
+#include <ORB/ORBDescriptor.h>
 #include <larvio/feature_msg.h>
 
-#include <vector>
-#include <map>
 #include <boost/shared_ptr.hpp>
+#include <fstream>
+#include <map>
 #include <opencv2/opencv.hpp>
 #include <opencv2/video.hpp>
+#include <vector>
 
-#include <ORB/ORBDescriptor.h>
-
-#include <fstream>
-
-#include "sensors/ImuData.hpp"
 #include "sensors/ImageData.hpp"
+#include "sensors/ImuData.hpp"
 
 namespace larvio {
 
@@ -34,7 +32,7 @@ namespace larvio {
  *    in image sequences.
  */
 class ImageProcessor {
-public:
+ public:
   // Constructor
   ImageProcessor(std::string& config_file_);
   // Disable copy and assign constructors.
@@ -54,21 +52,17 @@ public:
    * @param imu msg buffer.
    * @return true if have feature msg.
    */
-  bool processImage(
-        const ImageDataPtr& msg,
-        const std::vector<ImuData>& imu_msg_buffer,
-        MonoCameraMeasurementPtr features);
+  bool processImage(const ImageDataPtr& msg,
+                    const std::vector<ImuData>& imu_msg_buffer,
+                    MonoCameraMeasurementPtr features);
 
   // Get publish image.
-  cv::Mat getVisualImg() {
-      return visual_img;
-  }
+  cv::Mat getVisualImg() { return visual_img; }
 
   typedef boost::shared_ptr<ImageProcessor> Ptr;
   typedef boost::shared_ptr<const ImageProcessor> ConstPtr;
 
-private:
-
+ private:
   /*
    * @brief ProcessorConfig Configuration parameters for
    *    feature detection and tracking.
@@ -109,7 +103,7 @@ private:
    *    from previous cam0 frame to current cam0 frame.
    */
   void integrateImuData(cv::Matx33f& cam_R_p2c,
-            const std::vector<ImuData>& imu_msg_buffer);
+                        const std::vector<ImuData>& imu_msg_buffer);
 
   /*
    * @brief predictFeatureTracking Compensates the rotation
@@ -124,11 +118,10 @@ private:
    *
    * Note that the input and output points are of pixel coordinates.
    */
-  void predictFeatureTracking(
-      const std::vector<cv::Point2f>& input_pts,
-      const cv::Matx33f& R_p_c,
-      const cv::Vec4d& intrinsics,
-      std::vector<cv::Point2f>& compenstated_pts);
+  void predictFeatureTracking(const std::vector<cv::Point2f>& input_pts,
+                              const cv::Matx33f& R_p_c,
+                              const cv::Vec4d& intrinsics,
+                              std::vector<cv::Point2f>& compenstated_pts);
 
   /*
    * @brief initializeFirstFrame
@@ -144,8 +137,7 @@ private:
    *    stereo images.
    * @param imu msg buffer
    */
-  bool initializeFirstFeatures(
-          const std::vector<ImuData>& imu_msg_buffer);
+  bool initializeFirstFeatures(const std::vector<ImuData>& imu_msg_buffer);
 
   /*
    * @brief findNewFeaturesToBeTracked
@@ -194,13 +186,11 @@ private:
    * @return pts_out: undistorted points.
    */
   void undistortPoints(
-      const std::vector<cv::Point2f>& pts_in,
-      const cv::Vec4d& intrinsics,
-      const std::string& distortion_model,
-      const cv::Vec4d& distortion_coeffs,
+      const std::vector<cv::Point2f>& pts_in, const cv::Vec4d& intrinsics,
+      const std::string& distortion_model, const cv::Vec4d& distortion_coeffs,
       std::vector<cv::Point2f>& pts_out,
-      const cv::Matx33d &rectification_matrix = cv::Matx33d::eye(),
-      const cv::Vec4d &new_intrinsics = cv::Vec4d(1,1,0,0));
+      const cv::Matx33d& rectification_matrix = cv::Matx33d::eye(),
+      const cv::Vec4d& new_intrinsics = cv::Vec4d(1, 1, 0, 0));
 
   /*
    * @brief removeUnmarkedElements Remove the unmarked elements
@@ -213,10 +203,9 @@ private:
    * in the refined_vec.
    */
   template <typename T>
-  void removeUnmarkedElements(
-      const std::vector<T>& raw_vec,
-      const std::vector<unsigned char>& markers,
-      std::vector<T>& refined_vec) {
+  void removeUnmarkedElements(const std::vector<T>& raw_vec,
+                              const std::vector<unsigned char>& markers,
+                              std::vector<T>& refined_vec) {
     if (raw_vec.size() != markers.size()) {
       for (int i = 0; i < raw_vec.size(); ++i)
         refined_vec.push_back(raw_vec[i]);
@@ -238,10 +227,8 @@ private:
    *    in another image as pts2, they will be rescaled.
    * @return scaling_factor: scaling factor of the rescaling process.
    */
-  void rescalePoints(
-      std::vector<cv::Point2f>& pts1,
-      std::vector<cv::Point2f>& pts2,
-      float& scaling_factor);
+  void rescalePoints(std::vector<cv::Point2f>& pts1,
+                     std::vector<cv::Point2f>& pts2, float& scaling_factor);
 
   /*
    * @brief getFeatureMsg Get processed feature msg.
@@ -250,11 +237,7 @@ private:
   void getFeatureMsg(MonoCameraMeasurementPtr features);
 
   // Enum type for image state.
-  enum eImageState {
-      FIRST_IMAGE = 1,
-      SECOND_IMAGE = 2,
-      OTHER_IMAGES = 3
-  };
+  enum eImageState { FIRST_IMAGE = 1, SECOND_IMAGE = 2, OTHER_IMAGES = 3 };
 
   // Indicate if this is the first or second image message.
   eImageState image_state;
@@ -272,11 +255,11 @@ private:
   cv::Vec4d cam_distortion_coeffs;
 
   // Take a vector from cam frame to the IMU frame.
-  cv::Matx33d R_cam_imu;  
-  cv::Vec3d t_cam_imu;    
+  cv::Matx33d R_cam_imu;
+  cv::Vec3d t_cam_imu;
 
   // Take a vector from prev cam frame to curr cam frame
-  cv::Matx33f R_Prev2Curr;  
+  cv::Matx33f R_Prev2Curr;
 
   // Previous and current images
   ImageDataPtr prev_img_ptr;
@@ -328,6 +311,6 @@ private:
 typedef ImageProcessor::Ptr ImageProcessorPtr;
 typedef ImageProcessor::ConstPtr ImageProcessorConstPtr;
 
-} // end namespace larvio
+}  // end namespace larvio
 
 #endif
